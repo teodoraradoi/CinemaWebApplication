@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Cinema.DataModel.Movies>
+
+@{
+    ViewData["Title"] = "Coming_soon";
+}
+
+@{
+    int min(int a, int b)
+    {
+        if (a < b)
+            return a;
+        return b;
+    }
+}
+
+<div class="container" style="text-align: center">
+    <h1>
+        <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+        </svg> Coming soon in cinema <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+        </svg>
+    </h1>
+</div>
+<div class="container" style="background-color: #E5E5E5">
+    @{var itemCount = 0;}
+
+    <div class="flex-container" style="text-align: center">
+        @while (itemCount < min(4, Model.Count()))
+        {
+
+            @foreach (var item in Model)
+            {
+                if (itemCount % 3 == 0 || itemCount % 3 == 3)
+                {
+                    @:<div class="row">
+                    }
+
+                    <div class="col-sm-4">
+                        <br>
+                        <div class="img-with-text">
+                            <img src="~/images/@Html.DisplayFor(modelItem => item.Image)" alt="@Html.DisplayFor(modelItem => item.Name)" class="zoom" style="width: 50%" />
+                            <br><p>
+                                <b>
+                                    @Html.DisplayFor(modelItem => item.Name) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                                    </svg> @Html.DisplayFor(modelItem => item.ReleaseDate.DayOfWeek), @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.ReleaseDate))
+                                </b>
+                            </p>
+                        </div>
+                    </div>
+                    itemCount++;
+                    if ((itemCount % 3) == 0)
+                    {
+                    @:</div>
+                }
+
+            }}
+    </div>
+
+    @{itemCount = 0;}
+</div>

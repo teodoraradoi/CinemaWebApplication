@@ -1,8 +1,69 @@
-﻿@{
+﻿@model IEnumerable<Cinema.DataModel.Movies>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    int min(int a, int b)
+    {
+        if (a < b)
+            return a;
+        return b;
+    }
+}
+
+<div class="container rounded" style="background-color:#E5E5E5">
+
+    @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+    {
+        <br>
+        <a asp-controller="Movies" asp-action="Create" class="btn btn-dark">Create Movie</a>
+        <br><br>
+    }
+
+    @{var itemCount = 0;}
+
+    @while (itemCount < min(4, Model.Count()))
+    {
+        foreach (var item in Model)
+        {
+            if (itemCount % 4 == 0 || itemCount % 4 == 4)
+            {
+                @:<div class="row">
+                }
+
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="@Html.DisplayFor(modelItem => item.Image)" target="_blank">
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                <img src="~/images/@Html.DisplayFor(modelItem => item.Image)" alt="@Html.DisplayFor(modelItem => item.Name)" class="img-fluid home_zoom" width="200" height="250">
+                            </a>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-block px-2">
+                        <h4 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h4>
+                        <p class="card-text">
+                            <b>Duration:</b> @Html.DisplayFor(modelItem => item.Duration)
+                            <br><b>Rating:</b> @Html.DisplayFor(modelItem => item.Rating)
+                            <br><b>Type:</b> @Html.DisplayFor(modelItem => item.Type)
+                            <br><b>Genre:</b> @Html.DisplayFor(modelItem => item.Genre)
+                            <br><b>Director:</b> @Html.DisplayFor(modelItem => item.Directors)
+                            <br><b>Actors:</b> @Html.DisplayFor(modelItem => item.Actors)
+                        </p>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">MORE INFO</a>
+                        <a asp-controller="Reservations" asp-action="Tickets" asp-route-id="@item.Id" class="btn btn-dark">TICKES</a>
+                        <br><br>
+                    </div>
+                </div>
+                itemCount++;
+                if ((itemCount % 4) == 0)
+                {
+                @:</div>
+            }
+        }
+    }
+    @{itemCount = 0;}
 </div>

@@ -1,5 +1,9 @@
-﻿using CinemaWebApplication.Models;
+﻿using Cinema.BusinessLogic.Abstractions;
+using Cinema.DataAccess;
+using Cinema.DataModel;
+using CinemaWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,15 +16,36 @@ namespace CinemaWebApplication.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private IMoviesRepository moviesRepo;
+        private readonly CinemaDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMoviesRepository moviesRepository, CinemaDbContext context)
         {
             _logger = logger;
+            this.moviesRepo = moviesRepository;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var movies = moviesRepo.GetCurrentMovies();
+            return View(movies);
+        }
+
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            return View(movie);
         }
 
         public IActionResult Privacy()

@@ -1,0 +1,57 @@
+﻿@model Cinema.DataModel.Movies
+
+<div class="container rounded" style="background-color:#E5E5E5">
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col" style="text-align: left">
+                <div class="thumbnail">
+                    <img src="~/images/@Model.Image" alt="@Model.Name" class="img-fluid" width="450" height="600">
+                </div>
+            </div>
+
+            <div class="col">
+                <h1 style="text-align: center">
+                    @Html.DisplayFor(model => model.Name)
+                    <a asp-controller="Reservations" asp-action="Tickets" asp-route-id="@Model.Id" class="btn btn-dark">TICKES</a>
+                </h1>
+                <hr class="solid" style="width: 450px">
+                <p style="font-size: 12px; text-align: center; color: gray">
+                    @Html.DisplayFor(model => model.Duration) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                    </svg> @Html.DisplayFor(model => model.Type)
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                    </svg>@Html.DisplayFor(model => model.Genre)
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                    </svg> <br>
+                    directed by @Html.DisplayFor(model => model.Directors) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                    </svg> with @Html.DisplayFor(model => model.Actors)
+                </p>
+                <hr class="solid">
+                <div class="paragraph" style="text-align: justify">
+                    @Html.DisplayFor(model => model.Description)
+                </div><br>
+                @{ if (Model.Trailer != null)
+                    { <div class="col" style="text-align: center">
+                            @{
+                                Model.Trailer = Model.Trailer.Replace("watch?v=", "embed/");
+                            }
+                            <iframe width="572" height="347" src=@Model.Trailer frameborder="0" allowfullscreen></iframe>
+                        </div> }
+                }
+            </div>
+        </div>
+
+        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+        {
+            <br>
+            <a asp-controller="Movies" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-dark">Edit</a>
+            <a asp-controller="Movies" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-dark">Delete</a><br><br>
+            <a asp-controller="Reservations" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-dark">Create Tickets</a><br><br>
+        }
+
+    </div><br>
+</div>

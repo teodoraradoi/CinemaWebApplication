@@ -1,3 +1,5 @@
+using Cinema.BusinessLogic.Abstractions;
+using Cinema.DataAccess;
 using CinemaWebApplication.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,8 +32,19 @@ namespace CinemaWebApplication
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddDbContext<CinemaDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("CinemaConnection")));
+
+            services.AddScoped<IMoviesRepository, EFMoviesRepository>();
+            services.AddScoped<IReservationsRepository, EFReservationsRepository>();
+            services.AddScoped<ITicketsRepository, EFTicketsRepository>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

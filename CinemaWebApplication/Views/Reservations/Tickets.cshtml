@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Cinema.DataModel.Tickets>
+@{
+    ViewData["Title"] = "Tickets";
+}
+
+<table class="table" style="text-align: center">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+
+    @{ int counter = 1;}
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@counter</th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateAndTime.DayOfWeek) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                    </svg>
+                    @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.DateAndTime))
+                </td>
+                <td>
+                    @Convert.ToString(string.Format("{0:hh:mm}", item.DateAndTime))
+                </td>
+                <td>
+                    <a asp-controller="Reservations" asp-action="BookTickets" asp-route-Id="@item.Id" class="btn btn-dark">Book Tickets</a>
+                    @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                    {<a asp-controller="Reservations" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-dark">Delete</a>}
+                </td>
+            </tr>
+            counter++;
+        }
+    </tbody>
+
+</table>
