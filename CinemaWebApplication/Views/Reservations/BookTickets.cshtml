@@ -33,7 +33,7 @@
         <div class="col-sm-2">
             <div class="form-group">
                 Number of seats
-                <input asp-for="reservation.NumberOfSeats" class="form-control" />
+                <input type = "number" min="1" max="10" step="1" asp-for="reservation.NumberOfSeats" class="form-control" />
                 <span asp-validation-for="reservation.NumberOfSeats" class="text-danger"></span>
             </div>
         </div>
@@ -46,10 +46,20 @@
 @*
     @section scripts{
         <script type="text/javascript">
-            function func(aux) {
 
-                @Url.Content("~/Reservations/BookTickets/" + aux);
-            }
+        $(function () {
+
+            $("#@Html.IdFor(s => s.reservation.NumberOfSeats)")
+            .on("input",function () {
+
+                if ($(this).val() < 1 || $(this).val() > 10) {
+                    alert("Cannot be less than 1 or more than 10");
+                    $(this).val("");
+                }
+            });
+
+        });
 
         </script>
+
     }*@

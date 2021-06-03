@@ -15,13 +15,11 @@ namespace CinemaWebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private IMoviesRepository moviesRepo;
         private readonly CinemaDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, IMoviesRepository moviesRepository, CinemaDbContext context)
+        public HomeController(IMoviesRepository moviesRepository, CinemaDbContext context)
         {
-            _logger = logger;
             this.moviesRepo = moviesRepository;
             _context = context;
         }
